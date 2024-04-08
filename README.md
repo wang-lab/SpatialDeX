@@ -19,7 +19,7 @@ Installing SpatialDeX from GitHub
 
 ```
 library(devtools)
-install_github("wang-lab/SpatialDeX/")
+install_github("wang-lab/SpatialDeX")
 ```
 
 
