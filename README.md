@@ -6,11 +6,11 @@ The rapid development of spatial transcriptomics (ST) technologies has enabled t
 These instructions will get you a copy of the project up and running on your local machine for prediction and testing purposes.
 
 ### Prerequisites
-The following components were used to run the software. Different versions of each may or may not be compatible.
+The following components were used to run the package. Different versions of each may or may not be compatible.
 
 - R (>= 3.5.0)
 - GSVA 
-- copykat
+- copykat: copykat[V1.1.0] (https://github.com/navinlabcode/copykat)
 - dplyr
 
 ### Installing
@@ -29,6 +29,7 @@ An example raw UMI matrix from a subset of tumor sample sequenced by 10X Genomic
 To test the package, run this line of code in R/Rstudio:
 
 ```
+data(example_raw_count)
 res<- SpatialDeX(raw_exprs=example_raw_count,
                       lambda=1,
                       sam.name="test",
