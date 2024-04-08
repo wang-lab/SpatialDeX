@@ -24,7 +24,7 @@ install_github("wang-lab/SpatialDeX")
 
 
 ## Running the example
-An example raw UMI matrix from a subset of tumor sample sequenced by 10X Genomics platform is included with this package named, example_raw_count.
+An example raw UMI matrix from a subset of a tumor sample sequenced by 10X Genomics platform is included with this package named, example_raw_count.
 
 To test the package, run this line of code in R/Rstudio:
 
