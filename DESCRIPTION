@@ -1,0 +1,21 @@
+Package: SpatialDeX
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 1.1.0
+Authors@R: c(
+    person("Xinyi", "Liu", email = "Xinyiliu@uic.edu",
+    role = c("aut", "cre"))
+    )
+Maintainer: Xinyi Liu <xinyiliu@uic.edu>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+Depends:
+    R (>= 3.5.0)
+Imports:
+  dplyr,
+  GSVA,
+  copykat
+RoxygenNote: 7.3.1
