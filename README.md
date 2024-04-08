@@ -29,6 +29,7 @@ An example raw UMI matrix from a subset of tumor sample sequenced by 10X Genomic
 To test the package, run this line of code in R/Rstudio:
 
 ```
+library(SpatialDeX)
 data(example_raw_count)
 res<- SpatialDeX(raw_exprs=example_raw_count,
                       lambda=1,
