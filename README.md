@@ -60,7 +60,7 @@ res<- SpatialDeX(raw_exprs,
 ***raw_exprs*** is raw gene expression matrix, with gene symbols in rows and spot names in columns.
 
 ### Parameters
-***lambda*** lambda is the hyperparameter used for regularization in ridge regression.
+***lambda*** is the hyperparameter used for regularization in ridge regression.
 
 ***sam.name*** is sample name.
 
