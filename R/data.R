@@ -18,7 +18,7 @@
 #' @format a data frame with 56051 rows and 7 variables
 #' @source this data is sourced from the `copycat` package
 #'
-full.anno <- load(system.file("extdata", "full.anno.RData", package = "SpatialDeX"))
+load(system.file("extdata", "full.anno.RData", package = "SpatialDeX"))
 #'
 #'
 #'
@@ -29,7 +29,7 @@ full.anno <- load(system.file("extdata", "full.anno.RData", package = "SpatialDe
 #' @format a data frame with 1316 rows and 1 variables
 #' @source this data is sourced from the `copycat` package
 #'
-cyclegenes <- load(system.file("extdata", "cyclegenes.RData", package = "SpatialDeX"))
+load(system.file("extdata", "cyclegenes.RData", package = "SpatialDeX"))
 #'
 #' DNA.hg20, sourced from copycat package
 #'
@@ -38,6 +38,6 @@ cyclegenes <- load(system.file("extdata", "cyclegenes.RData", package = "Spatial
 #' @format a data frame with 12205 rows and 3 variables
 #' @source this data is sourced from the `copycat` package
 #'
-DNA.hg20 <- load(system.file("extdata", "DNA.hg20.RData", package = "SpatialDeX"))
+load(system.file("extdata", "DNA.hg20.RData", package = "SpatialDeX"))
 
 
