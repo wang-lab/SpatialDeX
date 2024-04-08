@@ -1,5 +1,5 @@
 # SpatialDeX
-The rapid development of spatial transcriptomics (ST) technologies has enabled transcriptome-wide profiling of gene expression in tissue sections. Despite the emergence of single-cell resolution platforms, most ST sequencing studies still operate at the multi-cell resolution. Consequently, deconvolution of cell identities within the spatial spots has become imperative for characterizing cell type-specific spatial organization.  To this end, we introduce SpatialDeX, Spatial Deconvolution Explorer, a regression model-based method for estimating cell type proportions in tumor ST spots.  
+The rapid development of spatial transcriptomics (ST) technologies has enabled transcriptome-wide profiling of gene expression in tissue sections. Despite the emergence of single-cell resolution platforms, most ST sequencing studies still operate at the multi-cell resolution. Consequently, deconvolution of cell identities within the spatial spots has become imperative for characterizing cell type-specific spatial organization.  To this end, we introduce SpatialDeX, **Spatial** Deconvolution Explorer, a regression model-based method for estimating cell type proportions in tumor ST spots.  
 
 ## Getting Started
 
