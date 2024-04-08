@@ -43,7 +43,7 @@ res<- SpatialDeX(raw_exprs=example_raw_count,
 
 ## Running SpatialDeX
 ```
-SpatialDeX = function(raw_exprs,
+res<- SpatialDeX(raw_exprs,
                       lambda,
                       sam.name,
                       LOW.DR,
