@@ -13,12 +13,12 @@
 #'
 #' Annotation file for all known genes, sourced from copycat package
 #'
-#' @name full_anno
-#' @title full_anno
+#' @name full.anno
+#' @title full.anno
 #' @format a data frame with 56051 rows and 7 variables
 #' @source this data is sourced from the `copycat` package
 #'
-full_anno <- load(system.file("extdata", "full_anno.RData", package = "SpatialDeX"))
+full.anno <- load(system.file("extdata", "full.anno.RData", package = "SpatialDeX"))
 #'
 #'
 #'

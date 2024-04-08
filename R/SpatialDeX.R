@@ -59,7 +59,7 @@ SpatialDeX = function(raw_exprs,
   rownames(all_count)<-all_count$gene
   all_count<-all_count[,-1]
   id.type="S"
-  load(system.file("extdata", "full_anno.RData", package = "SpatialDeX"))
+  load(system.file("extdata", "full.anno.RData", package = "SpatialDeX"))
   load(system.file("extdata", "cyclegenes.RData", package = "SpatialDeX"))
   load(system.file("extdata", "DNA.hg20.RData", package = "SpatialDeX"))
   cnv_data<-copykat::copykat(rawmat=all_count,id.type=id.type, LOW.DR=LOW.DR, UP.DR=UP.DR,ngene.chr=ngene.chr,sam.name=sam.name,
