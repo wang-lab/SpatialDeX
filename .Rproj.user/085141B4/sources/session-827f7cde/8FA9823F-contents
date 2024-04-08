@@ -19,3 +19,4 @@ Imports:
   GSVA,
   copykat
 RoxygenNote: 7.3.1
+Data: extdata/cyclegenes.RData extdata/DNA.hg20.RData extdata/full.anno.RData

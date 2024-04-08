@@ -1,3 +1,19 @@
+#' @title full.anno
+#' @export
+full.anno <-  load(system.file("extdata", "full.anno.RData", package = "SpatialDeX"))
+
+#' @title cyclegenes
+#' @export
+cyclegenes <-  load(system.file("extdata", "cyclegenes.RData", package = "SpatialDeX"))
+
+#' @title DNA.hg20
+#' @export
+DNA.hg20 <-  load(system.file("extdata", "DNA.hg20.RData", package = "SpatialDeX"))
+
+
+
+
+
 #' @title replace_smallest_with_zero
 #' @description This function replaces the smallest values in a vector with zero.
 #' @param row a numeric vector
