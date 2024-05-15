@@ -18,4 +18,7 @@ full.anno
 \description{
 Annotation file for all known genes, sourced from copycat package
 }
+\examples{
+load(system.file("extdata", "full.anno.RData", package = "SpatialDeX"))
+}
 \keyword{datasets}

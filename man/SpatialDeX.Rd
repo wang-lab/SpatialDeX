@@ -33,7 +33,8 @@ SpatialDeX(
 
 \item{win.size}{minimal window sizes for segmentation for copykat.}
 
-\item{top_cell_type}{defind the number of cell types to retain based on the proportion of each cell type. Choose an integer from 0 to 9.}
+\item{top_cell_type}{defind the number of cell types to retain based on
+the proportion of each cell type. Choose an integer from 0 to 9.}
 }
 \value{
 prediction_result_filter

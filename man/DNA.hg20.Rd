@@ -18,4 +18,7 @@ DNA.hg20
 \description{
 DNA.hg20, sourced from copycat package
 }
+\examples{
+load(system.file("extdata", "DNA.hg20.RData", package = "SpatialDeX"))
+}
 \keyword{datasets}

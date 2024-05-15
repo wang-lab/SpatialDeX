@@ -9,7 +9,8 @@ replace_smallest_with_zero(row, top_cell_type)
 \arguments{
 \item{row}{a numeric vector}
 
-\item{top_cell_type}{defind the number of cell types to retain based on the proportion of each cell type. Choose an integer from 0 to 9.}
+\item{top_cell_type}{defind the number of cell types to retain based on the
+proportion of each cell type. Choose an integer from 0 to 9.}
 }
 \value{
 a numeric vector with the smallest values replaced by zero.

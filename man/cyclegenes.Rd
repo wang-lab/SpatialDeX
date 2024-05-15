@@ -18,4 +18,7 @@ cyclegenes
 \description{
 cyclegenes, sourced from copycat package
 }
+\examples{
+load(system.file("extdata", "cyclegenes.RData", package = "SpatialDeX"))
+}
 \keyword{datasets}

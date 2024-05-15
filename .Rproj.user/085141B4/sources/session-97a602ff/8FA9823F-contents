@@ -1,0 +1,37 @@
+Package: SpatialDeX
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.99.0
+Authors@R: c(
+    person("Xinyi", "Liu", email = "Xinyiliu@uic.edu",
+    role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0002-5716-8264")))
+Maintainer: Xinyi Liu <xinyiliu@uic.edu>
+Description: The rapid development of spatial transcriptomics (ST) technologies has
+    enabled transcriptome-wide profiling of gene expression in tissue sections. 
+    Despite the emergence of single-cell resolution platforms, most ST 
+    sequencing studies still operate at the multi-cell resolution. Consequently,
+    deconvolution of cell identities within the spatial spots has become 
+    imperative for characterizing cell type-specific spatial organization.  
+    To this end, we introduce SpatialDeX, a regression model-based method for
+    estimating cell type proportions in tumor ST spots.  SpatialDeX exhibited
+    comparable performance to reference-based methods and outperformed other
+    reference-free methods with simulated ST data. Using experimental ST data,
+    SpatialDeX demonstrated superior performance compared with both 
+    reference-based and reference-free approaches. 
+License: GPL-2
+Encoding: UTF-8
+LazyData: false
+Imports:
+  dplyr,
+  GSVA,
+  copykat
+RoxygenNote: 7.3.1
+Data: extdata/cyclegenes.RData extdata/DNA.hg20.RData extdata/full.anno.RData
+biocViews: Spatial, Transcriptomics, Software
+URL: https://github.com/wang-lab/SpatialDeX/
+BugReports: https://github.com/wang-lab/SpatialDeX/issues
+VignetteEngine: knitr::rmarkdown
+VignetteBuilder: knitr
+Suggests: knitr, rmarkdown
+
