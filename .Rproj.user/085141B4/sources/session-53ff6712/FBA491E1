@@ -1,0 +1,26 @@
+{
+    "id": "FBA491E1",
+    "path": "~/SpatialDeX/R/get_feat_coefficient.R",
+    "project_path": "R/get_feat_coefficient.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1721062935194.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "189,53",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1722289239,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1722289239735,
+    "read_only": false,
+    "read_only_alternatives": []
+}

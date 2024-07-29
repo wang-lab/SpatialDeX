@@ -6,13 +6,13 @@
 \usage{
 SpatialDeX(
   raw_exprs,
-  lambda,
+  lambda = 1,
   sam.name,
-  LOW.DR,
-  UP.DR,
-  ngene.chr,
-  KS.cut,
-  win.size,
+  LOW.DR = 0.03,
+  UP.DR = 0.2,
+  ngene.chr = 5,
+  KS.cut = 0.1,
+  win.size = 25,
   top_cell_type = NULL
 )
 }

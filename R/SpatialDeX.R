@@ -59,13 +59,13 @@ replace_smallest_with_zero <- function(row,top_cell_type) {
 
 
 SpatialDeX <- function(raw_exprs,
-    lambda,
+    lambda=1,
     sam.name,
-    LOW.DR,
-    UP.DR,
-    ngene.chr,
-    KS.cut,
-    win.size,
+    LOW.DR=0.03,
+    UP.DR=0.2,
+    ngene.chr=5,
+    KS.cut=0.1,
+    win.size=25,
     top_cell_type=NULL) {
     raw_exprs<-as.matrix(raw_exprs)
     message("start gene marker enrichment")
@@ -110,7 +110,7 @@ SpatialDeX <- function(raw_exprs,
 
     data_feature[is.na(data_feature)]<-0
     data_feature<-apply(data_feature,c(1,2),as.numeric)
-    data_feature<-apply(data_feature,2,function(x) (x-min(x))/(max(x)-min(x)))
+    data_feature[,-dim(data_feature)[2]]<-apply(data_feature[,-dim(data_feature)[2]],2,function(x) (x-min(x))/(max(x)-min(x)))
     weighted_feature<-as.matrix(weighted_feature)
     prediction_result<-data_feature%*%t(weighted_feature)%*%
       solve((weighted_feature %*%
