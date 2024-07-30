@@ -1,7 +1,7 @@
 {
     "id": "7E3F14D4",
-    "path": "~/SpatialDeX/vignettes/SpatialDeX_tutorial.Rmd",
-    "project_path": "vignettes/SpatialDeX_tutorial.Rmd",
+    "path": "~/SpatialDeX/vignettes/SpatialDeX.Rmd",
+    "project_path": "vignettes/SpatialDeX.Rmd",
     "type": "r_markdown",
     "hash": "0",
     "contents": "",
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "167,0",
-        "scrollLine": "0"
+        "cursorPosition": "243,0",
+        "scrollLine": "207"
     },
     "folds": "",
     "lastKnownWriteTime": 1722290267,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1722290267036,
+    "last_content_update": 1722290267,
     "read_only": false,
     "read_only_alternatives": []
 }

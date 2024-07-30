@@ -1,0 +1,287 @@
+---
+title: "SpatialDeX: A Reference-Free Method for Cell Type Deconvolution of Spatial Transcriptomics Data in Solid Tumors"
+author: 
+  - name: "Xinyi Liu<sup>1</sup>, Gongyu Tang<sup>1,3</sup>, Yuhao Chen<sup>1</sup>, Yuanxiang Li<sup>1</sup>, Hua Li<sup>4,5</sup>, and Xiaowei Wang<sup>1,2</sup>"
+    affiliation: "<sup>1</sup>Department of Pharmacology and Regenerative Medicine, University of Illinois at Chicago, <sup>2</sup>University of Illinois Cancer Center, Chicago, IL, USA; <sup>3</sup>Department of Mechanical Engineering and Materials Science, <sup>4</sup>Department of Radiation Oncology, Washington University in St. Louis, St. Louis, MO, USA; <sup>5</sup>Department of Bioengineering, University of Illinois Urbana-Champaign, Urbana, IL."
+package: SpatialDeX
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 2
+vignette: >
+    %\VignetteIndexEntry{SpatialDeX: A Reference-Free Method for Cell Type Deconvolution of Spatial Transcriptomics Data in Solid Tumors}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}  
+---
+
+# 1 Introduction
+
+SpatialDeX, a novel reference-free deconvolution method to estimate the proportion of cell types at the spot level in spatial transcriptomics (ST) data. Our hypothesis is that a complex mixture of various cell types within a spot can be estimated by referencing individual cell type signatures. Thus, SpatialDex offers a built-in feature coefficient matrix to estimate cell type proportions in each spot, eliminating the need for additional reference data. To this end, we developed a linear regression model to compute the feature coefficient matrix.
+
+Let A represent the M × N feature matrix of M spots and N features. B is the M × K binary cell identity matrix, where bjX = 1 if spot j contains cell type X (j = 1, 2, …, M; X = 1, 2, …, K), and bjX = 0 otherwise. The relationship between cell types and features is indicated in a latent coefficient matrix W with size K × N. The feature matrix A is modeled as follows:
+
+\[
+A = BW + \epsilon
+\]
+where \(\epsilon\) is a noise term following a Gaussian distribution with a mean of zero. The coefficient matrix W can be estimated through ridge regression:
+
+\[
+W = (B^T B + \lambda I)^{-1} B^T A
+\]
+
+Where \(I\) is the identity matrix and \(\lambda\) was determined through cross-validation using the training dataset. To compute the p values for each feature, we conducted a permutation test by randomly assigning cell type identities to the training spots 10,000 times. The FDR was then calculated using the Benjamini-Hochberg method. Only features with the coefficient > 0 and FDR < 0.001 were retained. The filtered \(W\) was then used to generate \(B'\), an estimated cell type score matrix for new ST testing data as follows:
+
+\[
+B' = A'W(W^T W + \lambda'I)^{-1}
+\]
+
+Where \(\lambda'\) was determined through cross-validation and \(A'\) represents the feature matrix of new ST testing data.
+
+After obtaining estimated cell type score matrix through the linear regression model, we first replaced the negative scores with zero, and then converted the scores for each spot into percentage values. For each spot, if the largest percentage was below 15% or the number of cell types with a percentage above 30% exceeded two, we designated the spot as unidentified. The inclusion of the "unidentified" category allows our method to classify the ST spots with low cellular content or unknown cell types. The dominant cell types were defined as those with the highest proportions.
+
+# 2 Installation
+
+## 2.1 Prerequisites
+
+The following components were used to run the package. Different versions of each may or may not be compatible.
+
+- R (>= 4.3.2)
+- GSVA 
+- copykat: copykat[V1.1.0] (https://github.com/navinlabcode/copykat)
+- dplyr
+
+## 2.2 Installing
+
+To install the package, start R and enter: 
+
+```r
+library(devtools)
+install_github("wang-lab/SpatialDeX")
+```
+
+# 3 Running SpatialDeX
+
+Once SpatialDeX is installed, it can be loaded with the following command:
+ 
+ ```r
+library(SpatialDeX)
+ ```
+ 
+## 3.1 Running deconvolution example
+
+An illustrative example of a raw UMI matrix derived from a subset of a tumor sample sequenced using the 10X Genomics platform is packaged within SpatialDeX. This matrix, termed "example_raw_count",  each row represents a distinct gene and each column represents a unique spot barcode.
+
+```r
+data("example_raw_count")
+```
+
+ ```r
+example_raw_count[1:5,1:4]
+ ```
+ 
+|      | AGTTATTGAAAGGTAA-1| ATAAACCATTGGACGG-1| ATAAACGGACCCGTAA-1| ATAAAGGTCAAGTACG-1|
+|:-----|------------------:|------------------:|------------------:|------------------:|
+|SP100 |                  0|                  0|                  0|                  1|
+|CAB39 |                  0|                  0|                  1|                  1|
+|ITM2C |                  1|                 10|                  2|                  3|
+|PSMD1 |                  0|                  1|                  0|                  0|
+|NCL   |                  1|                  7|                  4|                  3|
+
+To test the package, run this line of code in R/Rstudio:
+
+```r
+res<- SpatialDeX::SpatialDeX(raw_exprs=example_raw_count,
+    lambda=1,
+    sam.name="test",
+    LOW.DR=0.03,
+    UP.DR=0.2,
+    ngene.chr=5,
+    KS.cut=0.1,
+    win.size=25,
+    top_cell_type=7)
+```
+
+### 3.1.1 Parameters
+
+***lambda*** lambda is the hyperparameter used for regularization in ridge regression. Default is 1.
+
+***sam.name*** is sample name.
+
+***LOW.DR*** is minimal population fractions of genes for smoothing for CNV detection. Default is 0.03.
+
+***UP.DR*** is minimal population fractions of genes for segmentation for CNV detection. Default is 0.2.
+
+***ngene.chr*** is minimal number of genes per chromosome for cell filtering for CNV detection. Default is 5.
+
+***KS.cut*** is segmentation parameters, input 0 to 1; larger looser criteria for CNV detection. Default is 0.1.
+
+***win.size*** is minimal window sizes for segmentation for CNV detection. Default is 25.
+
+***top_cell_type*** define the number of cell types to retain based on the proportion of each cell type. Choose an integer from 0 to 9.
+
+### 3.1.2 Output
+
+Our analysis primarily targets major cell types, encompassing malignant cells, T cells, B/plasma cells, macrophages, dendritic cells (DCs), mast cells, endothelial cells, NK cells, and fibroblasts. The resulting output comprises a dataframe containing spot barcodes and the proportions of these major cell types. In this example, the parameter "top_cell_type" is set to "7" to retain the cell types with the highest seven proportions.
+
+|                   | Malignant| B.plasma_cells|   T_cells| Endothelial|        DC| Mast_cells| Fibroblasts| Macrophages| NK|
+|:------------------|---------:|--------------:|---------:|-----------:|---------:|----------:|-----------:|-----------:|--:|
+|AGTTATTGAAAGGTAA-1 | 0.1206312|      0.1311543| 0.1527495|   0.0000000| 0.0702992|  0.1988094|   0.1842909|   0.1420654|  0|
+|ATAAACCATTGGACGG-1 | 0.1973387|      0.2149654| 0.1419585|   0.0876134| 0.0975152|  0.0000000|   0.1147252|   0.1458835|  0|
+|ATAAACGGACCCGTAA-1 | 0.2132504|      0.1211811| 0.1181572|   0.0000000| 0.1399636|  0.0988841|   0.1854656|   0.1230980|  0|
+|ATAAAGGTCAAGTACG-1 | 0.1877578|      0.1750442| 0.2445982|   0.0596204| 0.1587127|  0.1100996|   0.0641669|   0.0000000|  0|
+|ATAACGTTACCTCCAC-1 | 0.1420818|      0.1244093| 0.1858968|   0.0000000| 0.0754394|  0.0888839|   0.1634000|   0.2198887|  0|
+
+## 3.2 Get the weighted feature coefficient
+
+This function allows users to obtain their own weighted feature coefficient matrix. Below provides an example of identity of cell types across different spots. This identify matrix can be provided by users. Each row represents a spot, and each column represents a cell type. A value of 1 indicates the presence of that cell type in the spot, while 0 indicates its absence.
+
+```r
+raw_exprs <- example_raw_count[,1:10]
+cell_identity <- matrix(0, nrow = 10, ncol = 9)
+rownames(cell_identity) <- colnames(raw_exprs)
+colnames(cell_identity) <- paste0("cell_type", 1:9)
+for (i in 1:10) {
+  n_ones <- sample(0:3, 1)
+  if (n_ones > 0) {
+    ones_positions <- sample(1:9, n_ones)
+    cell_identity[i, ones_positions] <- 1
+  }
+}
+```
+```r
+cell_identity[,1:5]
+```
+
+|                   | cell_type1| cell_type2| cell_type3| cell_type4| cell_type5|
+|:------------------|----------:|----------:|----------:|----------:|----------:|
+|AGTTATTGAAAGGTAA-1 |          0|          1|          1|          0|          0|
+|ATAAACCATTGGACGG-1 |          0|          0|          0|          0|          0|
+|ATAAACGGACCCGTAA-1 |          0|          0|          0|          1|          0|
+|ATAAAGGTCAAGTACG-1 |          0|          0|          0|          0|          0|
+|ATAACGTTACCTCCAC-1 |          0|          0|          0|          0|          0|
+|ATACAGCGTCCACTGA-1 |          1|          0|          0|          0|          0|
+|ATACCCTGGCTCAAAT-1 |          0|          0|          0|          0|          0|
+|ATACCGTCATCCATAA-1 |          1|          0|          0|          0|          0|
+|ATACGACAGATGGGTA-1 |          0|          0|          0|          0|          0|
+|ATACGCCGATCTACCG-1 |          0|          1|          0|          1|          0|
+
+Run the code below to get the weighted feature coefficient matrix.
+
+```r
+feat_coef_mat<- get_feat_coefficient(cell_identity,
+                                raw_exprs=raw_exprs,
+                                LAMBDA=0.01,
+                                n_permutation=10000,
+                                pvalue=0.05,
+                                sam.name="sam.name",
+                                LOW.DR=0.03,
+                                UP.DR=0.2,
+                                ngene.chr=5,
+                                KS.cut=0.1,
+                                win.size=25,
+                                seed=1234)
+```
+
+### 3.2.1 Parameters
+
+***n_permutation*** n_permutation An integer indicating the number of permutations for randomly shuffling the cell labels of the input matrix to create a null distribution. Default is 10,000.
+
+***LAMBDA*** A numeric value for the regularization parameter. Default is 0.01.
+
+***sam.name*** Sample name
+
+***LOW.DR*** Minimal population fractions of genes for smoothing for CNV detection. Default is 0.03.
+
+***UP.DR*** Minimal population fractions of genes for segmentation for CNV detection. Default is 0.2.
+
+***ngene.chr*** Minimal number of genes per chromosome for cell filtering for CNV detection. Default is 5.
+
+***KS.cut*** Segmentation parameters, input 0 to 1; larger looser criteria for CNV detection. Default is 0.1.
+
+***win.size*** Minimal window sizes for segmentation for CNV detection. Default is 25.
+
+***pvalue*** Significance threshold for weighted feature coefficients. Calculated by permutation.
+
+***seed*** Seed for random number generation for reproducibility.
+
+### 3.2.2 Output
+
+A matrix of coefficients for each feature to each cell type is generated. Each cell in the matrix contains a coefficient indicating the strength of the relationship between a feature and a given cell type.
+
+```r
+feat_coef_mat[,1:5]
+```
+
+|           | htca_Epithelial_Cell| htca_Muscle| htca_Stromal_Cell| htca_Endothelial_Cell| htca_Monocyte|
+|:----------|--------------------:|-----------:|-----------------:|---------------------:|-------------:|
+|cell_type1 |                    0|           0|          0.000000|                     0|             0|
+|cell_type2 |                    0|           0|          0.000000|                     0|             0|
+|cell_type3 |                    0|           0|          0.000000|                     0|             0|
+|cell_type4 |                    0|           0|          1.588904|                     0|             0|
+|cell_type5 |                    0|           0|          0.000000|                     0|             0|
+|cell_type6 |                    0|           0|          0.000000|                     0|             0|
+|cell_type7 |                    0|           0|          0.000000|                     0|             0|
+|cell_type8 |                    0|           0|          0.000000|                     0|             0|
+|cell_type9 |                    0|           0|          0.000000|                     0|             0|
+
+# sessionInfo
+
+```r
+R version 4.3.2 (2023-10-31 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 11 x64 (build 22631)
+
+Matrix products: default
+
+
+locale:
+[1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8    LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                           LC_TIME=English_United States.utf8    
+
+time zone: America/Chicago
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] SpatialDeX_2.99.0
+
+loaded via a namespace (and not attached):
+  [1] DBI_1.2.2                   bitops_1.0-7                GSEABase_1.64.0             remotes_2.4.2.1            
+  [5] testthat_3.2.1              rlang_1.1.3                 magrittr_2.0.3              matrixStats_1.2.0          
+  [9] compiler_4.3.2              RSQLite_2.3.5               DelayedMatrixStats_1.24.0   roxygen2_7.3.1             
+ [13] callr_3.7.5                 png_0.1-7                   vctrs_0.6.5                 stringr_1.5.1              
+ [17] profvis_0.3.8               pkgconfig_2.0.3             crayon_1.5.2                fastmap_1.1.1              
+ [21] XVector_0.42.0              ellipsis_0.3.2              utf8_1.2.2                  promises_1.2.0.1           
+ [25] rmarkdown_2.26              sessioninfo_1.2.2           ps_1.7.6                    graph_1.80.0               
+ [29] purrr_1.0.2                 bit_4.0.4                   xfun_0.42                   beachmat_2.18.1            
+ [33] zlibbioc_1.48.0             cachem_1.0.8                GenomeInfoDb_1.38.6         blob_1.2.4                 
+ [37] later_1.3.0                 rhdf5filters_1.14.1         DelayedArray_0.28.0         Rhdf5lib_1.24.2            
+ [41] BiocParallel_1.36.0         prettyunits_1.2.0           irlba_2.3.3                 parallel_4.3.2             
+ [45] R6_2.5.1                    stringi_1.7.5               pkgload_1.3.4               brio_1.1.4                 
+ [49] GenomicRanges_1.54.1        Rcpp_1.0.8                  SummarizedExperiment_1.32.0 knitr_1.45                 
+ [53] copykat_1.0.8               usethis_2.1.6               GSVA_1.50.0                 IRanges_2.36.0             
+ [57] httpuv_1.6.3                Matrix_1.6-5                tidyselect_1.2.0            yaml_2.3.8                 
+ [61] rstudioapi_0.15.0           abind_1.4-5                 codetools_0.2-19            miniUI_0.1.1.1             
+ [65] curl_5.2.0                  processx_3.8.3              pkgbuild_1.4.3              lattice_0.22-5             
+ [69] tibble_3.1.6                Biobase_2.62.0              shiny_1.8.0                 withr_3.0.0                
+ [73] KEGGREST_1.42.0             evaluate_0.23               desc_1.4.3                  urlchecker_1.0.1           
+ [77] xml2_1.3.3                  Biostrings_2.70.2           pillar_1.9.0                rsconnect_1.2.1            
+ [81] MatrixGenerics_1.14.0       stats4_4.3.2                generics_0.1.3              xopen_1.0.0                
+ [85] rprojroot_2.0.4             RCurl_1.98-1.14             S4Vectors_0.40.2            sparseMatrixStats_1.14.0   
+ [89] xtable_1.8-4                glue_1.6.2                  tools_4.3.2                 ScaledMatrix_1.10.0        
+ [93] annotate_1.80.0             fs_1.5.2                    XML_3.99-0.16.1             rhdf5_2.46.1               
+ [97] grid_4.3.2                  devtools_2.4.5              AnnotationDbi_1.64.1        SingleCellExperiment_1.24.0
+[101] GenomeInfoDbData_1.2.11     BiocSingular_1.18.0         HDF5Array_1.30.1            rsvd_1.0.5                 
+[105] cli_3.6.2                   rcmdcheck_1.4.0             fansi_1.0.2                 S4Arrays_1.2.0             
+[109] dplyr_1.0.7                 digest_0.6.29               BiocGenerics_0.48.1         SparseArray_1.2.4          
+[113] htmlwidgets_1.6.4           memoise_2.0.1               htmltools_0.5.7             lifecycle_1.0.4            
+[117] httr_1.4.7                  mime_0.12                   bit64_4.0.5               
+```
+   
+   
+
+ 
+ 
