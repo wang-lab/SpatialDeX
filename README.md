@@ -18,7 +18,7 @@ Installing SpatialDeX from GitHub
 
 ```
 library(devtools)
-install_github("wang-lab/SpatialDeX")
+devtools::install_github("wang-lab/SpatialDeX", build_vignettes = TRUE)
 ```
 
 
