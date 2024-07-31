@@ -1,6 +1,6 @@
 Package: SpatialDeX
 Type: Package
-Title: What the Package Does (Title Case)
+Title: A reference-free method for cell type deconvolution of spatial transcriptomics data in solid tumors
 Version: 0.99.0
 Authors@R: c(
     person("Xinyi", "Liu", email = "Xinyiliu@uic.edu",
