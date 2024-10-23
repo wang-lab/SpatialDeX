@@ -9,7 +9,7 @@ These instructions will get you a copy of the project up and running on your loc
 The following components were used to run the package. Different versions of each may or may not be compatible.
 
 - R (>= 3.5.0)
-- GSVA 
+- GSVA (1.50.5)
 - copykat: copykat[V1.1.0] (https://github.com/navinlabcode/copykat)
 - dplyr
 
